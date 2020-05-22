@@ -1,0 +1,120 @@
+﻿@model DoctorPatientViewModel
+@using WebApp.Models
+@using WebApp.Controllers
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<head>
+    <link href="~/css/index.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <h1 class="title text-center">Prikaz podataka u domu zdravlja</h1>
+    <div class="md-container">
+        <div class="col-3 master">
+            <div class="master-item active-item" onclick="select(this)">Patients</div>
+            <div class="master-item " onclick="select(this)">Doctors</div>
+        </div>
+        <div class="col-9 detail">
+            <div class="btn-group">
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-plus"></i>  Add Patient
+                </a>
+            </div>
+            <button id="back-btn" class="hidden-md" onclick="back()">< Back</button>
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Personal identification number</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var patient in Model.Patients)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => patient.FirstName)</td>
+                            <td>@Html.DisplayFor(modelItem => patient.LastName)</td>
+                            <td>@Html.DisplayFor(modelItem => patient.PersonalID)</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@patient.Id" class="btn btn-success"><i class="glyphicon glyphicon-pencil"></i>  Edit</a>
+                                <a style="color:white;" onclick="showDetailsOf(@patient.DoctorId)" class="btn btn-success"><i class="glyphicon glyphicon-pencil"></i>  Details</a>
+                                <form asp-action="DeleteUser" asp-route-id="@patient.Id" method="post" style="display: inline;">
+                                    <button class="btn btn-danger">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="col-9 detailPatient" style="color:black;">
+
+            </div>
+        </div>
+
+        <div class="col-9 detail2">
+            <div class="btn-group">
+                <a asp-controller="Doctor" asp-action="CreateDoc" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-plus"></i>  Add Doctor
+                </a>
+            </div>
+            <button id="back-btn" class="hidden-md" onclick="back()">< Back</button>
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                    <tr>
+                        <th>First name</th>
+                        <th>Last name</th>
+                        <th>Years in service</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var doctor in Model.Doctors)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => doctor.FirstName)</td>
+                            <td>@Html.DisplayFor(modelItem => doctor.LastName)</td>
+                            <td>@Html.DisplayFor(modelItem => doctor.GodineIskustva)</td>
+                            <td>
+                                <a asp-controller="Doctor" asp-action="Edit" asp-route-id="@doctor.Id" class="btn btn-success"><i class="glyphicon glyphicon-pencil"></i>  Edit</a>
+                                <a style="color:white;" onclick="showDetailsOfDoctor(@doctor.Id)" class="btn btn-success"><i class="glyphicon glyphicon-pencil"></i>  Details</a>
+                                <form asp-controller="Doctor" asp-action="DeleteUser" asp-route-id="@doctor.Id" method="post" style="display: inline;">
+                                    <button class="btn btn-danger">
+                                        Delete
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="col-9 detailDoctor" style="color:black;">
+
+            </div>
+        </div>
+    </div>
+</body>
+
+@section scripts
+{
+    <script src="~/js/index.js" asp-append-version="true"></script>
+    <script src="~/js/patient.js" asp-append-version="true"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script>
+        function showDetailsOf(patientId) {
+            $('.detailPatient').load("/Doctor/DetailsByPatientId/" + patientId);
+        }
+    </script>
+    <script>
+        function showDetailsOfDoctor(doctorId) {
+            $('.detailDoctor').load("/Home/DetailsByDoctorId/" + doctorId);
+        }
+    </script>
+}

@@ -1,0 +1,29 @@
+﻿@model IEnumerable<DoctorViewModel>
+
+<table class="table table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Years in service</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var doctor in Model)
+        {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => doctor.FirstName)</td>
+            <td>@Html.DisplayFor(modelItem => doctor.LastName)</td>
+            <td>@Html.DisplayFor(modelItem => doctor.GodineIskustva)</td>
+            <td>
+                <a asp-controller="Doctor" asp-action="Edit" asp-route-id="@doctor.Id" class="btn btn-success"><i class="glyphicon glyphicon-pencil"></i>  Edit</a>
+                <form asp-controller="Doctor" asp-action="DeleteUser" asp-route-id="@doctor.Id" method="post" style="display: inline;">
+                    <button class="btn btn-danger">
+                        Delete
+                    </button>
+                </form>
+</tr>
+        }
+    </tbody>
+</table>
